@@ -7,8 +7,9 @@ The DCM4QI (Dicom for Quantitative Imaging) project works toward standardized fo
 
 ## Links
 
-* DCM4QI [Gitbook](https://qiicr.gitbooks.io) with detailed Explanations of [TID1500](https://qiicr.gitbooks.io/dcmqi-guide/user_guide/sr.html)
-* DCM4QI [Repository](https://github.com/QIICR/dcmqi)
+* official [DCM4QI instructions](https://dicom4qi.readthedocs.io/en/latest/instructions/sr-tid1500/) (supercedes Gitbook)
+* old DCM4QI [Gitbook](https://qiicr.gitbooks.io) with detailed Explanations of [TID1500](https://qiicr.gitbooks.io/dcmqi-guide/user_guide/sr.html)
+* [dcmqi library repository](https://github.com/QIICR/dcmqi)
 * TID 1500 [Reference](http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_TID_1500)
 * [FHIR](https://www.hl7.org/fhir/) Reference
 
