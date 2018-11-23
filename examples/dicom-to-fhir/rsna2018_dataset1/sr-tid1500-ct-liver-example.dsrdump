@@ -1,0 +1,61 @@
+Enhanced SR Document
+
+Patient             : JANCT000 (M, #99000)
+Series              : Measurements (#1001)
+Completion Flag     : COMPLETE
+Verification Flag   : VERIFIED
+Verifying Observers : 2016-11-24 15:37:54, Reader1, QIICR
+Content Date/Time   : 2016-11-24 15:37:54
+
+<CONTAINER:(,,"Imaging Measurement Report")=SEPARATE>
+  <has concept mod CODE:(,,"Language of Content Item and Descendants")=(eng,RFC5646,"English")>
+  <has obs context CODE:(,,"Observer Type")=(121006,DCM,"Person")>
+  <has obs context PNAME:(,,"Person Observer Name")="Reader1">
+  <has concept mod CODE:(,,"Procedure reported")=(P0-0099A,SRT,"Imaging procedure")>
+  <contains CONTAINER:(,,"Image Library")=SEPARATE>
+    <contains CONTAINER:(,,"Image Library Group")=SEPARATE>
+      <has acq context CODE:(,,"Modality")=(CT,DCM,"Computed Tomography")>
+      <has acq context DATE:(,,"Study Date")="20030417">
+      <has acq context NUM:(,,"Pixel Data Rows")="512" ({pixels},UCUM,"pixels")>
+      <has acq context NUM:(,,"Pixel Data Columns")="512" ({pixels},UCUM,"pixels")>
+      <has acq context NUM:(,,"Horizontal Pixel Spacing")="0.810547" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Vertical Pixel Spacing")="0.810547" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Row X")="1.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Row Y")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Row Z")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Column X")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Column Y")="1.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Column Z")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <contains IMAGE:=(CT image,)>
+        <has acq context NUM:(,,"Image Position (Patient) X")="-235.199997" (mm,UCUM,"millimeter")>
+        <has acq context NUM:(,,"Image Position (Patient) Y")="-226.800003" (mm,UCUM,"millimeter")>
+        <has acq context NUM:(,,"Image Position (Patient) Z")="-126.690002" (mm,UCUM,"millimeter")>
+      <contains IMAGE:=(CT image,)>
+        <has acq context NUM:(,,"Image Position (Patient) X")="-235.199997" (mm,UCUM,"millimeter")>
+        <has acq context NUM:(,,"Image Position (Patient) Y")="-226.800003" (mm,UCUM,"millimeter")>
+        <has acq context NUM:(,,"Image Position (Patient) Z")="-127.690002" (mm,UCUM,"millimeter")>
+      <contains IMAGE:=(CT image,)>
+        <has acq context NUM:(,,"Image Position (Patient) X")="-235.199997" (mm,UCUM,"millimeter")>
+        <has acq context NUM:(,,"Image Position (Patient) Y")="-226.800003" (mm,UCUM,"millimeter")>
+        <has acq context NUM:(,,"Image Position (Patient) Z")="-128.690002" (mm,UCUM,"millimeter")>
+  <contains CONTAINER:(,,"Imaging Measurements")=SEPARATE>
+    <contains CONTAINER:(,,"Measurement Group")=SEPARATE>
+      <has obs context TEXT:(,,"Activity Session")="1">
+      <has obs context TEXT:(,,"Tracking Identifier")="Measurements group 1">
+      <has obs context UIDREF:(,,"Tracking Unique Identifier")="1.3.6.1.4.1.43046.3.1.4.0.83735.1480019874.480725">
+      <contains CODE:(,,"Finding")=(T-D0060,SRT,"Organ")>
+      <has obs context TEXT:(,,"Time Point")="1">
+      <contains IMAGE:(,,"Referenced Segment")=(SG image,,1)>
+      <contains UIDREF:(,,"Source series for segmentation")="1.2.392.200103.20080913.113635.1.2009.6.22.21.43.10.23430.1">
+      <has concept mod CODE:(,,"Finding Site")=(T-62000,SRT,"Liver")>
+      <contains NUM:(,,"Attenuation Coefficient")="37.3289" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(R-00317,SRT,"Mean")>
+      <contains NUM:(,,"Attenuation Coefficient")="-778" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(R-404FB,SRT,"Minimum")>
+      <contains NUM:(,,"Attenuation Coefficient")="221" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(G-A437,SRT,"Maximum")>
+      <contains NUM:(,,"Attenuation Coefficient")="59.1691" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(R-10047,SRT,"Standard Deviation")>
+      <contains NUM:(,,"Volume")="70361.9" (mm3,UCUM,"cubic millimeter")>
+      <contains NUM:(,,"Volume")="70.3619" (cm3,UCUM,"cubic centimeter")>
+

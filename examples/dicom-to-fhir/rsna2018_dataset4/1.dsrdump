@@ -1,0 +1,30 @@
+Enhanced SR Document
+
+Patient             : TCGA-BP-4343 (#TCGA-BP-4343)
+Study               : Renal
+Series              : Crowds Cure Cancer Annotation as Measurement Report (#4578)
+Manufacturer        : PixelMed (XSLT from annotations_expanded.csv, #9723613413261)
+Completion Flag     : COMPLETE
+Verification Flag   : UNVERIFIED
+Content Date/Time   : 2017-11-26 22:42:17
+
+<CONTAINER:(,,"Imaging Measurement Report")=SEPARATE>
+  <has concept mod CODE:(,,"Language of Content Item and Descendants")=(eng,RFC5646,"English")>
+    <has concept mod CODE:(,,"Country of Language")=(US,ISO3166_1,"United States")>
+  <has obs context PNAME:(,,"Person Observer Name")="accomplished_peafowl">
+  <has concept mod CODE:(,,"Procedure reported")=(41806-1,LN,"CT Abdomen")>
+  <contains CONTAINER:(,,"Image Library")=SEPARATE>
+    <contains CONTAINER:(,,"Image Library Group")=SEPARATE>
+      <contains IMAGE:=(CT image,)>
+        <has acq context CODE:(,,"Modality")=(CT,DCM,"Computed Tomography")>
+        <has acq context DATE:(,,"Study Date")="19870620">
+        <has acq context TIME:(,,"Study Time")="135823">
+  <contains CONTAINER:(,,"Imaging Measurements")=SEPARATE>
+    <contains CONTAINER:(,,"Measurement Group")=SEPARATE>
+      <has obs context TEXT:(,,"Tracking Identifier")="5b6eb4301d3175942d29985a3d0...">
+      <has obs context UIDREF:(,,"Tracking Unique Identifier")="1.3.6.1.4.1.5962.1.1.0.0.0.1535644357.22655.1">
+      <has concept mod CODE:(,,"Finding Site")=(T-71000,SRT,"Kidney")>
+      <contains NUM:(,,"Length")="66.43856134" (mm,UCUM,"mm")>
+        <inferred from SCOORD:=(POLYLINE,172.835/270.0641,...)>
+          <selected from IMAGE:=(CT image,)>
+

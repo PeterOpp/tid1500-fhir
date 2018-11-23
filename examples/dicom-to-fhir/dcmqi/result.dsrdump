@@ -1,0 +1,85 @@
+Enhanced SR Document
+
+Patient             : JANCT000 (M, #99000)
+Series              : Measurements (#1001)
+Manufacturer        : QIICR (https://github.com/QIICR/dcmqi.git, #0)
+Completion Flag     : COMPLETE
+Verification Flag   : UNVERIFIED
+Content Date/Time   : 2018-11-22 10:38:04
+
+<CONTAINER:(,,"Imaging Measurement Report")=SEPARATE>
+  <has concept mod CODE:(,,"Language of Content Item and Descendants")=(eng,RFC5646,"English")>
+  <has obs context CODE:(,,"Observer Type")=(121007,DCM,"Device")>
+  <has obs context UIDREF:(,,"Device Observer UID")="1.2.3.4">
+  <has obs context TEXT:(,,"Device Observer Name")="SecretSauceGenerator">
+  <has obs context TEXT:(,,"Device Observer Manufacturer")="The friends of friends">
+  <has concept mod CODE:(,,"Procedure reported")=(P0-0099A,SRT,"Imaging procedure")>
+  <contains CONTAINER:(,,"Image Library")=SEPARATE>
+    <contains CONTAINER:(,,"Image Library Group")=SEPARATE>
+      <has acq context CODE:(,,"Modality")=(CT,DCM,"Computed Tomography")>
+      <has acq context DATE:(,,"Study Date")="20030417">
+      <has acq context TIME:(,,"Study Time")="104607">
+      <has acq context DATE:(,,"Content Date")="20030417">
+      <has acq context DATE:(,,"Acquisition Date")="20030417">
+      <has acq context TIME:(,,"Acquisition Time")="105028">
+      <has acq context UIDREF:(,,"Frame of Reference UID")="1.2.392.200103.20080913.113635.3.2009.6.22.21.44.34.23882.1">
+      <has acq context NUM:(,,"Pixel Data Rows")="512" ({pixels},UCUM,"pixels")>
+      <has acq context NUM:(,,"Pixel Data Columns")="512" ({pixels},UCUM,"pixels")>
+      <has acq context NUM:(,,"Horizontal Pixel Spacing")="0.810547" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Vertical Pixel Spacing")="0.810547" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Slice Thickness")="1.250000" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Image Position (Patient) X")="-235.199997" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Image Position (Patient) Y")="-226.800003" (mm,UCUM,"millimeter")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Row X")="1.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Row Y")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Row Z")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Column X")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Column Y")="1.000000" ({-1:1},UCUM,"{-1:1}")>
+      <has acq context NUM:(,,"Image Orientation (Patient) Column Z")="0.000000" ({-1:1},UCUM,"{-1:1}")>
+      <contains IMAGE:=(CT image,)>
+        <has acq context TIME:(,,"Content Time")="105039">
+        <has acq context NUM:(,,"Image Position (Patient) Z")="-126.690002" (mm,UCUM,"millimeter")>
+      <contains IMAGE:=(CT image,)>
+        <has acq context TIME:(,,"Content Time")="105040">
+        <has acq context NUM:(,,"Image Position (Patient) Z")="-127.690002" (mm,UCUM,"millimeter")>
+      <contains IMAGE:=(CT image,)>
+        <has acq context TIME:(,,"Content Time")="105041">
+        <has acq context NUM:(,,"Image Position (Patient) Z")="-128.690002" (mm,UCUM,"millimeter")>
+  <contains CONTAINER:(,,"Imaging Measurements")=SEPARATE>
+    <contains CONTAINER:(,,"Measurement Group")=SEPARATE>
+      <has obs context TEXT:(,,"Activity Session")="1">
+      <has obs context TEXT:(,,"Tracking Identifier")="Measurements group 1">
+      <has obs context UIDREF:(,,"Tracking Unique Identifier")="1.3.6.1.4.1.43046.3.1.4.8323329.5607.1542879484.507969">
+      <has concept mod TEXT:(,,"Algorithm Name")="3D Slicer Editor effect (gr...">
+      <has concept mod TEXT:(,,"Algorithm Version")="4.6 (group level)">
+      <has concept mod TEXT:(,,"Algorithm Parameters")="gamma: 2 (group level)">
+      <contains CODE:(,,"Finding")=(T-D0060,SRT,"Organ")>
+      <has obs context TEXT:(,,"Time Point")="1">
+      <contains IMAGE:(,,"Referenced Segment")=(SG image,,1)>
+      <contains UIDREF:(,,"Source series for segmentation")="1.2.392.200103.20080913.113635.1.2009.6.22.21.43.10.23430.1">
+      <has concept mod CODE:(,,"Finding Site")=(T-62000,SRT,"Liver")>
+      <contains NUM:(,,"Attenuation Coefficient")="37.3289" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Preprocessing operation")=(A.14,99TEST,"Top secret filter")>
+        <has concept mod CODE:(,,"Preprocessing operation b")=(A.14b,99TEST,"Top secret filter b")>
+        <has concept mod CODE:(,,"Derivation")=(R-00317,SRT,"Mean")>
+        <inferred from NUM:(,,"Parameter A")="9.91" (A.16,99TEST,"Cats")>
+        <inferred from NUM:(,,"Parameter B")="2" (A.18,99TEST,"Elephants")>
+        <inferred from NUM:(,,"Parameter Z")="1" (A.20,99TEST,"Apples")>
+        <has concept mod TEXT:(,,"Algorithm Name")="3D Slicer Editor effect (me...">
+        <has concept mod TEXT:(,,"Algorithm Version")="4.6 (measurement level)">
+        <has concept mod TEXT:(,,"Algorithm Parameters")="gamma: 2 (measurement level)">
+        <has properties TEXT:(,,"Population description")="Elves of the Black Forest">
+        <has properties NUM:(,,"Elf average weight")="10" (kg,UCUM,"kilogram")>
+        <has properties NUM:(,,"Elf average height")="11" (cm,UCUM,"centimeter")>
+      <contains NUM:(,,"Attenuation Coefficient")="-778" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(R-404FB,SRT,"Minimum")>
+        <has properties TEXT:(,,"Population description")="Elves of the Black Forest 2">
+        <has properties NUM:(,,"Elf average weight")="20" (kg,UCUM,"kilogram")>
+        <has properties NUM:(,,"Elf average height")="21" (cm,UCUM,"centimeter")>
+      <contains NUM:(,,"Attenuation Coefficient")="221" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(G-A437,SRT,"Maximum")>
+      <contains NUM:(,,"Attenuation Coefficient")="59.1691" ([hnsf'U],UCUM,"Hounsfield unit")>
+        <has concept mod CODE:(,,"Derivation")=(R-10047,SRT,"Standard Deviation")>
+      <contains NUM:(,,"Volume")="70361.9" (mm3,UCUM,"cubic millimeter")>
+      <contains NUM:(,,"Volume")="70.3619" (cm3,UCUM,"cubic centimeter")>
+
