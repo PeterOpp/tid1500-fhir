@@ -9,6 +9,12 @@ import {
 const diagnosticReport: fhirDiagnosticReport = {
   resourceType: "DiagnosticReport",
   status: "final",
+  identifier: [{
+    // this is the SOPInstanceUID and can be used to check for existing FHIR
+    // representations during import of SR
+    system: "urn:dicom:uid",
+    value: "1.2.276.0.7230010.3.1.4.8323329.5607.1542879484.507970"
+  }],
   code: {
     coding: [
       {
