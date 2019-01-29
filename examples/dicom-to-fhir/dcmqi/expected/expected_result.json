@@ -6,6 +6,12 @@
       "resource": {
         "resourceType": "DiagnosticReport",
         "status": "final",
+        "identifier": [
+          {
+            "system": "urn:dicom:uid",
+            "value": "1.2.276.0.7230010.3.1.4.8323329.5607.1542879484.507970"
+          }
+        ],
         "code": {
           "coding": [
             {
@@ -14,6 +20,9 @@
               "display": "Imaging Measurement Report"
             }
           ]
+        },
+        "subject": {
+          "reference": "Patient/Patient"
         },
         "imagingStudy": [
           {
@@ -28,6 +37,29 @@
             "reference": "Observation/Observation_attenuation_coefficient"
           }
         ]
+      },
+      "request": {
+        "method": "POST",
+        "url": ""
+      }
+    },
+    {
+      "resource": {
+        "id": "Patient",
+        "identifier": [
+          {
+            "system": "",
+            "value": "99000"
+          }
+        ],
+        "resourceType": "Patient",
+        "name": [
+          {
+            "family": "JANCT000"
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1943"
       },
       "request": {
         "method": "POST",
@@ -180,9 +212,7 @@
         "resourceType": "ImagingStudy",
         "uid": "1.2.392.200103.20080913.113635.0.2009.6.22.21.43.10.22941.1",
         "patient": {
-          "identifier": {
-            "value": "JANCT000"
-          }
+          "reference": "Patient/Patient"
         },
         "modalityList": [
           {

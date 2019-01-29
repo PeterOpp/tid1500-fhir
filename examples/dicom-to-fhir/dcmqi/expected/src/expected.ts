@@ -1,5 +1,6 @@
 import {
   fhirBundle,
+  fhirPatient,
   fhirDiagnosticReport,
   fhirObservation,
   fhirImagingStudy
@@ -8,6 +9,12 @@ import {
 const diagnosticReport: fhirDiagnosticReport = {
   resourceType: "DiagnosticReport",
   status: "final",
+  identifier: [{
+    // this is the SOPInstanceUID and can be used to check for existing FHIR
+    // representations during import of SR
+    system: "urn:dicom:uid",
+    value: "1.2.276.0.7230010.3.1.4.8323329.5607.1542879484.507970"
+  }],
   code: {
     coding: [
       {
@@ -16,6 +23,9 @@ const diagnosticReport: fhirDiagnosticReport = {
         display: "Imaging Measurement Report"
       }
     ]
+  },
+  subject: {
+    reference: "Patient/Patient"
   },
   imagingStudy: [{
     reference: "ImagingStudy/ImageLibray"
@@ -26,18 +36,30 @@ const diagnosticReport: fhirDiagnosticReport = {
     },
     {
       reference: "Observation/Observation_attenuation_coefficient"
-    } 
+    }
   ]
 };
+
+const patient: fhirPatient = {
+  id: "Patient",
+  identifier: [{
+    system: "",
+    value: "99000"
+  }],
+  resourceType: "Patient",
+  name: [{
+    family: "JANCT000"
+  }],
+  gender: "male",
+  birthDate: "1943" // inferred from age & study year
+}
 
 const imagingLibrary: fhirImagingStudy = {
   id: "ImageLibrary",
   resourceType: "ImagingStudy",
   uid: "1.2.392.200103.20080913.113635.0.2009.6.22.21.43.10.22941.1",
   patient: {
-    identifier: {
-      value: "JANCT000"
-    }
+    reference: "Patient/Patient"
   },
   modalityList: [
     {
@@ -104,7 +126,7 @@ const observation_attenuation_coefficient: fhirObservation = {
   component: [
     {
       code: {
-        coding: [ 
+        coding: [
           {
             system: "SRT",
             code: "R-00317",
@@ -219,6 +241,10 @@ export const bundle: fhirBundle = {
   entry: [
     {
       resource: diagnosticReport,
+      request: request
+    },
+    {
+      resource: patient,
       request: request
     },
     {
