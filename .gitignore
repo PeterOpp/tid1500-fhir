@@ -1,1 +1,2 @@
-/examples/dicom-to-fhir/expected/dist/
+/examples/dicom-to-fhir/dcmqi/expected/dist/
+.DS_Store
