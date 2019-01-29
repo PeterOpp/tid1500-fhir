@@ -1,2 +1,2 @@
-/examples/dicom-to-fhir/dcmqi/expected/dist/
+/examples/dicom-to-fhir/build_expected/dist/
 .DS_Store

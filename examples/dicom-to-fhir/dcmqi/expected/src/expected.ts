@@ -4,7 +4,7 @@ import {
   fhirDiagnosticReport,
   fhirObservation,
   fhirImagingStudy
-} from "./fhir-interfaces";
+} from "../../../build_expected/fhir-interfaces";
 
 const diagnosticReport: fhirDiagnosticReport = {
   resourceType: "DiagnosticReport",
@@ -261,3 +261,5 @@ export const bundle: fhirBundle = {
     }
   ]
 };
+
+console.log(JSON.stringify(bundle, null, 2));
