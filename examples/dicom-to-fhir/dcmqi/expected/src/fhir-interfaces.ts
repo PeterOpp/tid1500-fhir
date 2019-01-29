@@ -1,6 +1,6 @@
 import { fhirAddress } from "./fhir-interfaces";
 // Copyright (c) Fraunhofer MEVIS; Germany. All rights reserved.
-// **InsertLicense** code
+// 
 // -----------------------------------------------------------------------------
 /*!
 // \file fhir-interfaces.ts
