@@ -19,7 +19,8 @@ def _terminology(dcm_terminology):
     '''Return FHIR code system URI for given DICOM coding scheme designator'''
     if dcm_terminology == 'DCM':
         return 'http://dicom.nema.org/resources/ontology/DCM'
-    # TODO: 'SRT'?
+    elif dcm_terminology in ('SRT', 'SCT'): # what about 'SNM3'?
+        return 'http://snomed.info/sct'
     return dcm_terminology
     
 
