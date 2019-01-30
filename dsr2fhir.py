@@ -6,6 +6,8 @@ import xml.etree.ElementTree as ET
 
 
 DEFAULT_PATIENT_ID = 'Patient'
+DEFAULT_IMAGING_STUDY_ID = 'ImagingStudy'
+DEFAULT_DIAGNOSTIC_REPORT_ID = 'DiagnosticReport'
 
 DICOM_SEX_TO_FHIR_GENDER = {
     'M' : 'male',
@@ -42,6 +44,24 @@ def patient_resource(root):
     return result
 
 
+def imaging_study_resource(root):
+    result = dict(resourceType = 'imagingStudy')
+    result['id'] = DEFAULT_IMAGING_STUDY_ID
+
+#    result['uid'] = _tag_value(root, '###')
+    
+    return result
+
+
+def diagnostic_report_resource(root):
+    result = dict(resourceType = 'DiagnosticReport')
+    result['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
+
+    result['uid'] = _tag_value(root, 'SOPInstanceUID')
+    
+    return result
+
+
 def bundle(entries, default_request_method = 'POST'):
     for entry in entries:
         if not 'request' in entry:
@@ -63,7 +83,9 @@ if __name__ == '__main__':
 
     dcm2xml = subprocess.Popen(['dcm2xml', args.sr_filename], stdout = subprocess.PIPE)
     tree = ET.parse(dcm2xml.stdout)
-
+    root = tree.getroot()
     print(json.dumps(bundle([
-        patient_resource(tree.getroot()),
+        patient_resource(root),
+        imaging_study_resource(root),
+        diagnostic_report_resource(root),
     ])))
