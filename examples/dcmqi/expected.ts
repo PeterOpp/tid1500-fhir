@@ -4,7 +4,7 @@ import {
   fhirDiagnosticReport,
   fhirObservation,
   fhirImagingStudy
-} from "../../../build_expected/fhir-interfaces";
+} from "../build_expected/fhir-interfaces";
 
 const diagnosticReport: fhirDiagnosticReport = {
   resourceType: "DiagnosticReport",

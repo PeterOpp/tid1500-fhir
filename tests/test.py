@@ -3,7 +3,7 @@ import pytest
 from dsr2fhir.main import convert_sr_to_fhir_bundle
 
 TestCasesExpected = [
-  "examples/dcmqi/expected/expected_result.json",
+  "examples/dcmqi/expected.json",
   "examples/rsna2018_dataset1/expected.json"
 ]
 
