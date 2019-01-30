@@ -16,6 +16,7 @@ setuptools.setup(
     classifiers = [
         "Development Status :: 2 - Pre-Alpha",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 2",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Medical Science Apps.",
@@ -24,4 +25,6 @@ setuptools.setup(
     entry_points = {
         'console_scripts': ['dsr2fhir=dsr2fhir.main:main'],
     },
+    setup_requires = ["pytest-runner"],
+    tests_require = ["pytest"],
 )
