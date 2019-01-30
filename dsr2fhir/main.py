@@ -81,9 +81,8 @@ def bundle(entries, default_request_method = 'POST'):
     return result
 
 
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description = 'Transform a DICOM SR file into a FHIR resource bundle.')
+def main():
+    parser = argparse.ArgumentParser(description = 'Convert a DICOM SR file (TID 1500) into FHIR resources')
     parser.add_argument('sr_filename')
     args = parser.parse_args()
 
@@ -95,3 +94,8 @@ if __name__ == '__main__':
         imaging_study_resource(root),
         diagnostic_report_resource(root),
     ])))
+
+
+
+if __name__ == '__main__':
+    main()
