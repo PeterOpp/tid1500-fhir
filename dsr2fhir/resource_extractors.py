@@ -49,11 +49,35 @@ def patient_resource(root):
     return result
 
 
-def imaging_study_resource(root):
-    result = dict(resourceType = 'imagingStudy')
+def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
+    '''Extract imaging study that was the evidence used for the
+    measurement report
+    '''
+    
+    result = dict(resourceType = 'ImagingStudy')
     result['id'] = DEFAULT_IMAGING_STUDY_ID
 
-#    result['uid'] = _tag_value(root, '###')
+    study_element = root.find('evidence/study')
+    result['uid'] = study_element.attrib['uid']
+    result['patient'] = dict(
+        reference = 'Patient/%s' % patient_id,
+    )
+#    result['started']
+    serieses = []
+    for series_element in study_element.findall('series'):
+        series = dict()
+        series['uid'] = series_element.attrib['uid']
+        instances = []
+        for instance_element in series_element.findall('value'):
+            instances.append(dict(
+                sopClass = instance_element.find('sopclass').text,
+                uid = instance_element.find('instance').attrib['uid'],
+            ))
+        if instances:
+            series['instance'] = instances
+        serieses.append(series)
+    if serieses:
+        result['series'] = serieses
     
     return result
 
