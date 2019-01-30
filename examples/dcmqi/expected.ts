@@ -18,8 +18,8 @@ const diagnosticReport: fhirDiagnosticReport = {
   code: {
     coding: [
       {
-        code: "",
-        system: "",
+        code: "126000",
+        system: "http://dicom.nema.org/resources/ontology/DCM",
         display: "Imaging Measurement Report"
       }
     ]
