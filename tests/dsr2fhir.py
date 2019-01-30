@@ -6,6 +6,8 @@ import xml.etree.ElementTree as ET
 
 
 DEFAULT_PATIENT_ID = 'Patient'
+DEFAULT_IMAGING_STUDY_ID = 'ImagingStudy'
+DEFAULT_DIAGNOSTIC_REPORT_ID = 'DiagnosticReport'
 
 DICOM_SEX_TO_FHIR_GENDER = {
     'M' : 'male',
@@ -14,30 +16,55 @@ DICOM_SEX_TO_FHIR_GENDER = {
     '' : 'unknown',
 }
 
-def _tag_value(root, name = None):
-    tag_element = root.find(".*element[@name='%s']" % name)
-    if tag_element is None:
-        raise KeyError('tag named %r not found' % name)
-    return tag_element.text
+
+def _person_name(element):
+    result = dict()
+    for tag_name, attribute_name in (
+            ('last', 'family'), # TODO: which other tags can dsr2xml output?
+        ):
+        child_element = element.find(tag_name)
+        if child_element is not None:
+            result[attribute_name] = child_element.text
+    return result
 
 
 def patient_resource(root):
+    patient_element = root.find('patient')
+    assert patient_element is not None
+    
     result = dict(resourceType = 'Patient')
     result['id'] = DEFAULT_PATIENT_ID
-    result['name'] = dict(
-        family = _tag_value(root, 'PatientName')
-    )
+    result['name'] = _person_name(patient_element.find('name'))
     result['identifier'] = dict(
-        family = _tag_value(root, 'PatientID')
+        system = 'urn:dicom:<<<patient_id>>>',
+        value = patient_element.find('id').text
     )
-    result['gender'] = DICOM_SEX_TO_FHIR_GENDER[_tag_value(root, 'PatientSex')]
+    result['gender'] = DICOM_SEX_TO_FHIR_GENDER[patient_element.find('sex').text]
 
-    birthDate = _tag_value(root, 'PatientBirthDate')
+    birthDate = None#_tag_value(root, 'PatientBirthDate')
     # TODO: fall back to study date minus _tag_value(root, 'PatientAge')
     
     if birthDate:
         result['birthDate'] = birthDate
 
+    return result
+
+
+def imaging_study_resource(root):
+    result = dict(resourceType = 'imagingStudy')
+    result['id'] = DEFAULT_IMAGING_STUDY_ID
+
+#    result['uid'] = _tag_value(root, '###')
+    
+    return result
+
+
+def diagnostic_report_resource(root):
+    result = dict(resourceType = 'DiagnosticReport')
+    result['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
+
+    result['uid'] = root.find('instance').attrib['uid']
+    
     return result
 
 
@@ -53,22 +80,19 @@ def bundle(entries, default_request_method = 'POST'):
     result['entry'] = entries
     return result
 
-def convertSrToXml(filename):
-    dcm2xml = subprocess.Popen(['dcm2xml', filename], stdout = subprocess.PIPE)
-    tree = ET.parse(dcm2xml.stdout)
-    return tree
-
-def convertSrToJsonBundle(filename): 
-    xmlTree = convertSrToXml(filename)
+def convertSrToJsonBundle(filename):
+    dsr2xml = subprocess.Popen(['dsr2xml', filename], stdout = subprocess.PIPE)
+    tree = ET.parse(dsr2xml.stdout)
+    root = tree.getroot()
     return bundle([
-        patient_resource(xmlTree.getroot()),
+        patient_resource(root),
+        imaging_study_resource(root),
+        diagnostic_report_resource(root),
     ])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Transform a DICOM SR file into a FHIR resource bundle.')
     parser.add_argument('sr_filename')
     args = parser.parse_args()
-    
     jsonBundle = convertSrToJsonBundle(args.sr_filename)
-    json.dumps(jsonBundle)
-    print(json)
+    print(json.dumps(jsonBundle))

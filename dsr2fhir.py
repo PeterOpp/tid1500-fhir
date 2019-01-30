@@ -80,18 +80,19 @@ def bundle(entries, default_request_method = 'POST'):
     result['entry'] = entries
     return result
 
-
+def convertSrToJsonBundle(filename):
+    dsr2xml = subprocess.Popen(['dsr2xml', filename], stdout = subprocess.PIPE)
+    tree = ET.parse(dsr2xml.stdout)
+    root = tree.getroot()
+    return bundle([
+        patient_resource(root),
+        imaging_study_resource(root),
+        diagnostic_report_resource(root),
+    ])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Transform a DICOM SR file into a FHIR resource bundle.')
     parser.add_argument('sr_filename')
     args = parser.parse_args()
-
-    dsr2xml = subprocess.Popen(['dsr2xml', args.sr_filename], stdout = subprocess.PIPE)
-    tree = ET.parse(dsr2xml.stdout)
-    root = tree.getroot()
-    print(json.dumps(bundle([
-        patient_resource(root),
-        imaging_study_resource(root),
-        diagnostic_report_resource(root),
-    ])))
+    jsonBundle = convertSrToJsonBundle(args.sr_filename)
+    print(json.dumps(jsonBundle))

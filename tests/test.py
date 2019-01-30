@@ -3,13 +3,13 @@ import pytest
 from dsr2fhir import *
 
 TestCasesExpected = [
-  "examples/dicom-to-fhir/dcmqi/expected/expected_result.json",
-  "examples/dicom-to-fhir/rsna2018_dataset1/expected.json"
+  "examples/dcmqi/expected/expected_result.json",
+  "examples/rsna2018_dataset1/expected.json"
 ]
 
 TestCasesPaths = [
-  "examples/dicom-to-fhir/dcmqi/result.dcm",
-  "examples/dicom-to-fhir/rsna2018_dataset1/sr-tid1500-ct-liver-example.dcm"
+  "examples/dcmqi/result.dcm",
+  "examples/rsna2018_dataset1/sr-tid1500-ct-liver-example.dcm"
 ]
 
 @pytest.fixture(params=TestCasesPaths )
