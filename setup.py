@@ -26,5 +26,5 @@ setuptools.setup(
         'console_scripts': ['dsr2fhir=dsr2fhir.main:main'],
     },
     setup_requires = ["pytest-runner"],
-    tests_require = ["pytest"],
+    tests_require = ["pytest", "json_compare"],
 )
