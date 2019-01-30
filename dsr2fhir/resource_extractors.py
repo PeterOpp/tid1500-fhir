@@ -15,6 +15,13 @@ DICOM_SEX_TO_FHIR_GENDER = {
     '' : 'unknown',
 }
 
+def _terminology(dcm_terminology):
+    '''Return FHIR code system URI for given DICOM coding scheme designator'''
+    if dcm_terminology == 'DCM':
+        return 'http://dicom.nema.org/resources/ontology/DCM'
+    # TODO: 'SRT'?
+    return dcm_terminology
+    
 
 def _person_name(element):
     result = dict()
@@ -90,6 +97,14 @@ def diagnostic_report_resource(root, imaging_study_id = DEFAULT_IMAGING_STUDY_ID
         system = 'urn:dicom:uid',
         value = root.find('instance').attrib['uid'],
     )]
+    concept = root.find('document/content/container/concept')
+    result['code'] = dict(
+        coding = [dict(
+            code = concept.find('value').text,
+            display = concept.find('meaning').text,
+            system = _terminology(concept.find('scheme/designator').text),
+        )]
+    )
 
     result['subject'] = dict(
         reference = 'Patient/%s' % patient_id,
