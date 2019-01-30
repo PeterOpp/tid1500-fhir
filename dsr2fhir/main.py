@@ -5,16 +5,18 @@ import xml.etree.ElementTree as ET
 from . import resource_extractors
 
 
-def bundle(entries, default_request_method = 'POST'):
-    for entry in entries:
-        if not 'request' in entry:
-            entry['request'] = dict(
-                method = default_request_method,
-                url = '')
-    
+def bundle(resources, default_request_method = 'POST'):
     result = dict(resourceType = 'Bundle')
     result['type'] = 'transaction'
-    result['entry'] = entries
+    result['entry'] = []
+    
+    for resource in resources:
+        result['entry'].append(dict(
+            request = dict(
+                method = default_request_method,
+                url = ''),
+            resource = resource))
+    
     return result
 
 def convert_sr_to_fhir_bundle(filename):

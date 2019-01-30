@@ -33,11 +33,11 @@ def patient_resource(root):
     
     result = dict(resourceType = 'Patient')
     result['id'] = DEFAULT_PATIENT_ID
-    result['name'] = _person_name(patient_element.find('name'))
-    result['identifier'] = dict(
+    result['name'] = [_person_name(patient_element.find('name'))]
+    result['identifier'] = [dict(
         system = 'urn:dicom:<<<patient_id>>>',
         value = patient_element.find('id').text
-    )
+    )]
     result['gender'] = DICOM_SEX_TO_FHIR_GENDER[patient_element.find('sex').text]
 
     birthDate = None#_tag_value(root, 'PatientBirthDate')
