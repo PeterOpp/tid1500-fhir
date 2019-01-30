@@ -24,9 +24,9 @@ def convert_sr_to_fhir_bundle(filename):
     tree = ET.parse(dsr2xml.stdout)
     root = tree.getroot()
     return bundle([
+        resource_extractors.diagnostic_report_resource(root),
         resource_extractors.patient_resource(root),
         resource_extractors.imaging_study_resource(root),
-        resource_extractors.diagnostic_report_resource(root),
     ])
 
 def main():
