@@ -28,6 +28,7 @@ def patient_resource(root):
         family = _tag_value(root, 'PatientName')
     )
     result['identifier'] = dict(
+        system = 'urn:dicom:<<<patient_id>>>',
         value = _tag_value(root, 'PatientID')
     )
     result['gender'] = DICOM_SEX_TO_FHIR_GENDER[_tag_value(root, 'PatientSex')]
