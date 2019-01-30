@@ -41,6 +41,19 @@ def patient_resource(root):
     return result
 
 
+def bundle(entries, default_request_method = 'POST'):
+    for entry in entries:
+        if not 'request' in entry:
+            entry['request'] = dict(
+                method = default_request_method,
+                url = '')
+    
+    result = dict(resourceType = 'Bundle')
+    result['type'] = 'transaction'
+    result['entry'] = entries
+    return result
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Transform a DICOM SR file into a FHIR resource bundle.')
@@ -50,4 +63,6 @@ if __name__ == '__main__':
     dcm2xml = subprocess.Popen(['dcm2xml', args.sr_filename], stdout = subprocess.PIPE)
     tree = ET.parse(dcm2xml.stdout)
 
-    print(json.dumps(patient_resource(tree.getroot())))
+    print(json.dumps(bundle([
+        patient_resource(tree.getroot()),
+    ])))
