@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import subprocess
 import argparse
-import json
 import xml.etree.ElementTree as ET
 
 
@@ -91,10 +90,11 @@ def convert_sr_to_fhir_bundle(filename):
     ])
 
 def main():
+    import json
     parser = argparse.ArgumentParser(description = 'Convert a DICOM SR file (TID 1500) into FHIR resources')
     parser.add_argument('sr_filename')
     args = parser.parse_args()
-    return convert_sr_to_fhir_bundle(args.sr_filename)
+    print(json.dumps(convert_sr_to_fhir_bundle(args.sr_filename)))
 
 if __name__ == '__main__':
     main()
