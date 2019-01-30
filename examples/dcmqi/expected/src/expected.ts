@@ -28,7 +28,7 @@ const diagnosticReport: fhirDiagnosticReport = {
     reference: "Patient/Patient"
   },
   imagingStudy: [{
-    reference: "ImagingStudy/ImageLibray"
+    reference: "ImagingStudy/ImageLibrary"
   }],
   result: [
     {
