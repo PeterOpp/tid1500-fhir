@@ -19,9 +19,14 @@ def bundle(resources, default_request_method = 'POST'):
     
     return result
 
-def convert_sr_to_fhir_bundle(filename):
+def _dsr2xml(filename):
     dsr2xml = subprocess.Popen(['dsr2xml', filename], stdout = subprocess.PIPE)
+    # TODO: error handling
     tree = ET.parse(dsr2xml.stdout)
+    return tree
+
+def convert_sr_to_fhir_bundle(filename):
+    tree = _dsr2xml(filename)
     root = tree.getroot()
     return bundle([
         resource_extractors.diagnostic_report_resource(root),
