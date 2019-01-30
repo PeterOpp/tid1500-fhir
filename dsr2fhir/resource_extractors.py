@@ -5,7 +5,7 @@ instances) and generate FHIR resources.
 '''
 
 DEFAULT_PATIENT_ID = 'Patient'
-DEFAULT_IMAGING_STUDY_ID = 'ImagingStudy'
+DEFAULT_IMAGING_STUDY_ID = 'ImageLibrary'
 DEFAULT_DIAGNOSTIC_REPORT_ID = 'DiagnosticReport'
 
 DICOM_SEX_TO_FHIR_GENDER = {
@@ -82,11 +82,21 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     return result
 
 
-def diagnostic_report_resource(root):
+def diagnostic_report_resource(root, imaging_study_id = DEFAULT_IMAGING_STUDY_ID, patient_id = DEFAULT_PATIENT_ID):
     result = dict(resourceType = 'DiagnosticReport')
     result['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
 
-    result['uid'] = root.find('instance').attrib['uid']
+    result['identifier'] = [dict(
+        system = 'urn:dicom:uid',
+        value = root.find('instance').attrib['uid'],
+    )]
+
+    result['subject'] = dict(
+        reference = 'Patient/%s' % patient_id,
+    )
+    result['imagingStudy'] = [
+        dict(reference = 'ImagingStudy/%s' % imaging_study_id),
+    ]
     
     return result
 
