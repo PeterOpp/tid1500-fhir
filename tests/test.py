@@ -1,6 +1,6 @@
 import os,sys
 import pytest
-from dsr2fhir import *
+from dsr2fhir.main import convert_sr_to_fhir_bundle
 
 TestCasesExpected = [
   "examples/dcmqi/expected/expected_result.json",
@@ -17,6 +17,6 @@ def dicomFilePath( request ):
   return request.param
 
 def test_conversion_produces_json(dicomFilePath):
-  jsonBundle = convertSrToJsonBundle(dicomFilePath)
+  jsonBundle = convert_sr_to_fhir_bundle(dicomFilePath)
   assert type(jsonBundle) is dict
 
