@@ -110,6 +110,16 @@ def diagnostic_report_resource(root, imaging_study_id = DEFAULT_IMAGING_STUDY_ID
         )]
     )
 
+    # possible FHIR status values:   registered | partial | preliminary | final
+    # amended | corrected | appended | cancelled | entered-in-error | unknown
+
+    status = 'unknown'
+    completion_element = root.find('document/completion')
+    if completion_element is not None:
+        status = dict(PARTIAL = 'partial', COMPLETE = 'final')[
+            completion_element.attrib['flag']]
+    result['status'] = status
+    
     result['subject'] = dict(
         reference = 'Patient/%s' % patient_id,
     )
