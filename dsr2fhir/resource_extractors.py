@@ -98,12 +98,15 @@ def diagnostic_report_resource(root, imaging_study_id = DEFAULT_IMAGING_STUDY_ID
         system = 'urn:dicom:uid',
         value = root.find('instance').attrib['uid'],
     )]
-    concept = root.find('document/content/container/concept')
+
+    container_element = root.find('document/content/container')
+    
+    concept_element = container_element.find('concept')
     result['code'] = dict(
         coding = [dict(
-            code = concept.find('value').text,
-            display = concept.find('meaning').text,
-            system = _terminology(concept.find('scheme/designator').text),
+            code = concept_element.find('value').text,
+            display = concept_element.find('meaning').text,
+            system = _terminology(concept_element.find('scheme/designator').text),
         )]
     )
 
@@ -113,6 +116,14 @@ def diagnostic_report_resource(root, imaging_study_id = DEFAULT_IMAGING_STUDY_ID
     result['imagingStudy'] = [
         dict(reference = 'ImagingStudy/%s' % imaging_study_id),
     ]
+
+    performers = []
+    for pname_element in container_element.findall("pname/concept[value='121008']/.."):
+        # Person Observer Name
+        performers.append(dict(
+            actor = _person_name(pname_element.find('value')),
+        ))
+    result['performer'] = performers
     
     return result
 
