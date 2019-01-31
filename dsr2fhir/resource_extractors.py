@@ -115,6 +115,12 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     return result
 
 
+def observation_resource(measurement_group_element, id):
+    result = dict(resourceType = 'Observation')
+    result['id'] = id
+    return result
+
+
 def diagnostic_report_resource(
         root,
         imaging_study_id = DEFAULT_IMAGING_STUDY_ID,
@@ -156,6 +162,19 @@ def diagnostic_report_resource(
             actor = _person_name(pname_element.find('value')),
         ))
     result['performer'] = performers
+
+    observations = []
+    # we focus on 126010 / "Imaging Measurements" for now
+    # (there are also "Derived Imaging Measurements" and "Qualitative Evaluations"
+    measurements_element = container_element.find("container[relationship='CONTAINS']/concept[value='126010']/..")
+    for i, measurement_group_element in enumerate(
+            measurements_element.findall("container[relationship='CONTAINS']/concept[value='125007']/..")):
+        observations.append(observation_resource(measurement_group_element, id = 'Observation%d' % (i+1, )))
+    
+    results = []
+    for observation in observations:
+        results.append(dict(reference = 'Observation/%s' % observation['id']))
+    result['result'] = results
     
     return result
 
