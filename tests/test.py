@@ -38,3 +38,19 @@ def test_json_equals_except_ids(dicom_file_path, expected_bundle):
     result = json_compare.are_same(expected_json, json_bundle, True, ["reference", "id"])
     print(result)
     assert result[0]
+
+def test_bundle_structure(dicom_file_path): 
+    json_bundle = convert_sr_to_fhir_bundle(dicom_file_path)
+    for entry in json_bundle["entry"]:
+        assert "resource" in entry
+        assert "request" in entry
+
+def test_patient_reference_fit(dicom_file_path):
+    #json_bundle = convert_sr_to_fhir_bundle(dicom_file_path)
+    #patientResources = get_resources_of_type(json_bundle, "Patient")
+    #assert len(patientResources) == 1
+    pass
+
+def get_resources_of_type(bundle, type):
+    print(bundle)
+    return [ entry["resource"] for entry in bundle["entry"] if entry["resource"]["resourceType"] == type]
