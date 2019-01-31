@@ -39,11 +39,18 @@ def _coded_concept(concept_element):
 def _person_name(element):
     result = dict()
     for tag_name, attribute_name in (
-            ('last', 'family'), # TODO: which other tags can dsr2xml output?
+            ('prefix', 'prefix'),
+            ('first', 'given'),
+            ('middle', 'given'),
+            ('last', 'family'),
+            ('suffix', 'suffix'),
         ):
         child_element = element.find(tag_name)
         if child_element is not None:
-            result[attribute_name] = child_element.text
+            if attribute_name not in result:
+                result[attribute_name] = child_element.text
+            else:
+                result[attribute_name] += ' ' + child_element.text
     return result
 
 
