@@ -23,7 +23,15 @@ def _terminology(dcm_terminology):
     elif dcm_terminology in ('SRT', 'SCT'): # what about 'SNM3'?
         return 'http://snomed.info/sct'
     return dcm_terminology
-    
+
+def _coded_concept(concept_element):
+    return dict(
+        coding = [dict(
+            code = concept_element.find('value').text,
+            display = concept_element.find('meaning').text,
+            system = _terminology(concept_element.find('scheme/designator').text),
+        )]
+    )
 
 def _person_name(element):
     result = dict()
@@ -71,6 +79,12 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     result['patient'] = dict(
         reference = 'Patient/%s' % patient_id,
     )
+
+    # this feels a little unclean, since we're looking inside the report, and
+    # it may not /always/ have a 1:1 relationship with an imaging study
+    result['procedureCode'] = _coded_concept(
+        root.find("document/content/container/code[relationship='HAS CONCEPT MOD']/concept[value='121058']/.."))
+    
 #    result['started']
     serieses = []
     for series_element in study_element.findall('series'):
@@ -106,13 +120,7 @@ def diagnostic_report_resource(
     container_element = root.find('document/content/container')
     
     concept_element = container_element.find('concept')
-    result['code'] = dict(
-        coding = [dict(
-            code = concept_element.find('value').text,
-            display = concept_element.find('meaning').text,
-            system = _terminology(concept_element.find('scheme/designator').text),
-        )]
-    )
+    result['code'] = _coded_concept(concept_element)
 
     # possible FHIR status values:   registered | partial | preliminary | final
     # amended | corrected | appended | cancelled | entered-in-error | unknown
