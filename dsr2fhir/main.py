@@ -28,8 +28,8 @@ def _dsr2xml(filename):
 def convert_sr_to_fhir_bundle(filename):
     tree = _dsr2xml(filename)
     root = tree.getroot()
-    return bundle([
-        resource_extractors.diagnostic_report_resource(root),
+    return bundle(
+        resource_extractors.diagnostic_report_resources(root) + [
         resource_extractors.patient_resource(root),
         resource_extractors.imaging_study_resource(root),
     ])

@@ -127,13 +127,16 @@ def observation_groups_resources(measurement_group_element, observation_counter,
     return result
 
 
-def diagnostic_report_resource(
+def diagnostic_report_resources(
         root,
         imaging_study_id = DEFAULT_IMAGING_STUDY_ID,
         patient_id = DEFAULT_PATIENT_ID):
+    result = []
+    
     report = dict(resourceType = 'DiagnosticReport')
     report['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
-
+    result.append(report)
+    
     report['identifier'] = [dict(
         system = 'urn:dicom:uid',
         value = root.find('instance').attrib['uid'],
@@ -188,6 +191,7 @@ def diagnostic_report_resource(
         results.append(dict(reference = 'Observation/%s' % observation['id']))
     report['result'] = results
     
-    return report
+    result.extend(observations)
+    return result
 
 
