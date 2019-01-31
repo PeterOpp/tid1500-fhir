@@ -131,10 +131,10 @@ def diagnostic_report_resource(
         root,
         imaging_study_id = DEFAULT_IMAGING_STUDY_ID,
         patient_id = DEFAULT_PATIENT_ID):
-    result = dict(resourceType = 'DiagnosticReport')
-    result['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
+    report = dict(resourceType = 'DiagnosticReport')
+    report['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
 
-    result['identifier'] = [dict(
+    report['identifier'] = [dict(
         system = 'urn:dicom:uid',
         value = root.find('instance').attrib['uid'],
     )]
@@ -142,7 +142,7 @@ def diagnostic_report_resource(
     container_element = root.find('document/content/container')
     
     concept_element = container_element.find('concept')
-    result['code'] = _coded_concept(concept_element)
+    report['code'] = _coded_concept(concept_element)
 
     # possible FHIR status values:   registered | partial | preliminary | final
     # amended | corrected | appended | cancelled | entered-in-error | unknown
@@ -152,12 +152,12 @@ def diagnostic_report_resource(
     if completion_element is not None:
         status = dict(PARTIAL = 'partial', COMPLETE = 'final')[
             completion_element.attrib['flag']]
-    result['status'] = status
+    report['status'] = status
     
-    result['subject'] = dict(
+    report['subject'] = dict(
         reference = 'Patient/%s' % patient_id,
     )
-    result['imagingStudy'] = [
+    report['imagingStudy'] = [
         dict(reference = 'ImagingStudy/%s' % imaging_study_id),
     ]
 
@@ -167,7 +167,7 @@ def diagnostic_report_resource(
         performers.append(dict(
             actor = _person_name(pname_element.find('value')),
         ))
-    result['performer'] = performers
+    report['performer'] = performers
 
     observation_counter = itertools.count(1)
     
@@ -181,13 +181,13 @@ def diagnostic_report_resource(
             observation_groups_resources(
                 measurement_group_element,
                 observation_counter,
-                report_status = result['status']))
+                report_status = report['status']))
     
     results = []
     for observation in observations:
         results.append(dict(reference = 'Observation/%s' % observation['id']))
-    result['result'] = results
+    report['result'] = results
     
-    return result
+    return report
 
 
