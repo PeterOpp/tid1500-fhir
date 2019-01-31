@@ -7,6 +7,8 @@ Useful link: dsr2xml's schema definition
 https://github.com/InsightSoftwareConsortium/DCMTK/blob/master/dcmsr/data/dsr2xml.xsd
 '''
 
+import itertools
+
 DEFAULT_PATIENT_ID = 'Patient'
 DEFAULT_IMAGING_STUDY_ID = 'ImageLibrary'
 DEFAULT_DIAGNOSTIC_REPORT_ID = 'DiagnosticReport'
@@ -115,9 +117,13 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     return result
 
 
-def observation_resource(measurement_group_element, id):
-    result = dict(resourceType = 'Observation')
-    result['id'] = id
+def observation_groups_resources(measurement_group_element, observation_counter, report_status):
+    result = []
+    group_observation = dict(resourceType = 'Observation')
+    group_observation['id'] = 'Observation%d' % next(observation_counter)
+    result.append(group_observation)
+    # in DICOM, measurement groups do not have a status themselves:
+    group_observation['status'] = dict(partial = 'preliminary', final = 'final')[report_status]
     return result
 
 
@@ -163,13 +169,19 @@ def diagnostic_report_resource(
         ))
     result['performer'] = performers
 
+    observation_counter = itertools.count(1)
+    
     observations = []
     # we focus on 126010 / "Imaging Measurements" for now
     # (there are also "Derived Imaging Measurements" and "Qualitative Evaluations"
     measurements_element = container_element.find("container[relationship='CONTAINS']/concept[value='126010']/..")
-    for i, measurement_group_element in enumerate(
-            measurements_element.findall("container[relationship='CONTAINS']/concept[value='125007']/..")):
-        observations.append(observation_resource(measurement_group_element, id = 'Observation%d' % (i+1, )))
+    for measurement_group_element in measurements_element.findall(
+            "container[relationship='CONTAINS']/concept[value='125007']/.."):
+        observations.extend(
+            observation_groups_resources(
+                measurement_group_element,
+                observation_counter,
+                report_status = result['status']))
     
     results = []
     for observation in observations:
