@@ -5,12 +5,15 @@ import xml.etree.ElementTree as ET
 from . import resource_extractors
 
 
-def bundle(entries, default_request_method = 'POST'):
-    for entry in entries:
-        if not 'request' in entry:
-            entry['request'] = dict(
+def bundle(resources, default_request_method = 'POST'):
+    entries = []
+    for resource in resources:
+        entries.append( dict(
+            request =  dict(
                 method = default_request_method,
-                url = '')
+                url = ''),
+            resource = resource
+        ))
     
     result = dict(resourceType = 'Bundle')
     result['type'] = 'transaction'
