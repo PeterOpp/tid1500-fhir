@@ -68,6 +68,17 @@ const imagingLibrary: fhirImagingStudy = {
       display: "Computed Tomography"
     }
   ],
+  procedureCode: [
+    {
+      coding: [
+        {
+          system: "SRT",
+          code: "P0-0099A",
+          display: "Imaging procedure"
+        }
+      ]
+    }
+  ],
   started: "2003-04-17 10:46:07",
   series: [
     {

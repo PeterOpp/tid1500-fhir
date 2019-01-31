@@ -76,6 +76,17 @@ const imagingLibrary: fhirImagingStudy = {
     }
   ],
   started: "2003-04-17 10:46:07",
+  procedureCode: [
+    {
+      coding: [
+        {
+          system: "SRT",
+          code: "P0-0099A",
+          display: "Imaging procedure"
+        }
+      ]
+    }
+  ],
   series: [
     {
       uid: "1.2.392.200103.20080913.113635.1.2009.6.22.21.43.10.23430.1",

@@ -46,11 +46,34 @@ def test_bundle_structure(dicom_file_path):
         assert "request" in entry
 
 def test_patient_reference_fit(dicom_file_path):
-    #json_bundle = convert_sr_to_fhir_bundle(dicom_file_path)
-    #patientResources = get_resources_of_type(json_bundle, "Patient")
-    #assert len(patientResources) == 1
-    pass
+    json_bundle = convert_sr_to_fhir_bundle(dicom_file_path)
+    patient_resources = get_resources_of_type(json_bundle, "Patient")
+    assert len(patient_resources) == 1
+    patient = patient_resources[0]
+    patient_id = patient["id"]
+    
+    for diagnostic_report in get_resources_of_type(json_bundle, "DiagnosticReport"):
+        assert diagnostic_report["subject"]["reference"] == "Patient/" + patient_id
+    
+    for imaging_study in get_resources_of_type(json_bundle, "ImagingStudy"):
+        assert imaging_study["patient"]["reference"] == "Patient/" + patient_id
+
+    for observation in get_resources_of_type(json_bundle, "Observation"):
+        assert observation["subject"]["reference"] == "Patient/" + patient_id
+
+def test_report_reference_fit(dicom_file_path):
+    json_bundle = convert_sr_to_fhir_bundle(dicom_file_path)
+    diagnostic_report_resources = get_resources_of_type(json_bundle, "DiagnosticReport")
+    assert len(diagnostic_report_resources) == 1
+    results = diagnostic_report_resources[0]["result"]
+    observation_references = [ result["reference"] for result in results]
+    
+    for observation in get_resources_of_type(json_bundle, "Observation"):
+        assert "Observation/" + observation["id"] in observation_references
+    
+
+
+    
 
 def get_resources_of_type(bundle, type):
-    print(bundle)
     return [ entry["resource"] for entry in bundle["entry"] if entry["resource"]["resourceType"] == type]
