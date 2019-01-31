@@ -2,6 +2,9 @@
 The methods in this module shall extract all relevant measurement
 information from DICOM structured reports (specifically, TID1500
 instances) and generate FHIR resources.
+
+Useful link: dsr2xml's schema definition
+https://github.com/InsightSoftwareConsortium/DCMTK/blob/master/dcmsr/data/dsr2xml.xsd
 '''
 
 DEFAULT_PATIENT_ID = 'Patient'
