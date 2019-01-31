@@ -15,6 +15,7 @@ DICOM_SEX_TO_FHIR_GENDER = {
     '' : 'unknown',
 }
 
+
 def _terminology(dcm_terminology):
     '''Return FHIR code system URI for given DICOM coding scheme designator'''
     if dcm_terminology == 'DCM':
@@ -90,7 +91,10 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     return result
 
 
-def diagnostic_report_resource(root, imaging_study_id = DEFAULT_IMAGING_STUDY_ID, patient_id = DEFAULT_PATIENT_ID):
+def diagnostic_report_resource(
+        root,
+        imaging_study_id = DEFAULT_IMAGING_STUDY_ID,
+        patient_id = DEFAULT_PATIENT_ID):
     result = dict(resourceType = 'DiagnosticReport')
     result['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
 
