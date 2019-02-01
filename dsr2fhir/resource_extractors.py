@@ -2,7 +2,12 @@
 The methods in this module shall extract all relevant measurement
 information from DICOM structured reports (specifically, TID1500
 instances) and generate FHIR resources.
+
+Useful link: dsr2xml's schema definition
+https://github.com/InsightSoftwareConsortium/DCMTK/blob/master/dcmsr/data/dsr2xml.xsd
 '''
+
+import itertools
 
 DEFAULT_PATIENT_ID = 'Patient'
 DEFAULT_IMAGING_STUDY_ID = 'ImageLibrary'
@@ -23,16 +28,31 @@ def _terminology(dcm_terminology):
     elif dcm_terminology in ('SRT', 'SCT'): # what about 'SNM3'?
         return 'http://snomed.info/sct'
     return dcm_terminology
-    
+
+def _coded_concept(concept_element):
+    return dict(
+        coding = [dict(
+            code = concept_element.find('value').text,
+            display = concept_element.find('meaning').text,
+            system = _terminology(concept_element.find('scheme/designator').text),
+        )]
+    )
 
 def _person_name(element):
     result = dict()
     for tag_name, attribute_name in (
-            ('last', 'family'), # TODO: which other tags can dsr2xml output?
+            ('prefix', 'prefix'),
+            ('first', 'given'),
+            ('middle', 'given'),
+            ('last', 'family'),
+            ('suffix', 'suffix'),
         ):
         child_element = element.find(tag_name)
         if child_element is not None:
-            result[attribute_name] = child_element.text
+            if attribute_name not in result:
+                result[attribute_name] = child_element.text
+            else:
+                result[attribute_name] += ' ' + child_element.text
     return result
 
 
@@ -71,6 +91,12 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     result['patient'] = dict(
         reference = 'Patient/%s' % patient_id,
     )
+
+    # this feels a little unclean, since we're looking inside the report, and
+    # it may not /always/ have a 1:1 relationship with an imaging study
+    result['procedureCode'] = _coded_concept(
+        root.find("document/content/container/code[relationship='HAS CONCEPT MOD']/concept[value='121058']/.."))
+    
 #    result['started']
     serieses = []
     for series_element in study_element.findall('series'):
@@ -91,14 +117,27 @@ def imaging_study_resource(root, patient_id = DEFAULT_PATIENT_ID):
     return result
 
 
-def diagnostic_report_resource(
+def observation_groups_resources(measurement_group_element, observation_counter, report_status):
+    result = []
+    group_observation = dict(resourceType = 'Observation')
+    group_observation['id'] = 'Observation%d' % next(observation_counter)
+    result.append(group_observation)
+    # in DICOM, measurement groups do not have a status themselves:
+    group_observation['status'] = dict(partial = 'preliminary', final = 'final')[report_status]
+    return result
+
+
+def diagnostic_report_resources(
         root,
         imaging_study_id = DEFAULT_IMAGING_STUDY_ID,
         patient_id = DEFAULT_PATIENT_ID):
-    result = dict(resourceType = 'DiagnosticReport')
-    result['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
-
-    result['identifier'] = [dict(
+    result = []
+    
+    report = dict(resourceType = 'DiagnosticReport')
+    report['id'] = DEFAULT_DIAGNOSTIC_REPORT_ID
+    result.append(report)
+    
+    report['identifier'] = [dict(
         system = 'urn:dicom:uid',
         value = root.find('instance').attrib['uid'],
     )]
@@ -106,13 +145,7 @@ def diagnostic_report_resource(
     container_element = root.find('document/content/container')
     
     concept_element = container_element.find('concept')
-    result['code'] = dict(
-        coding = [dict(
-            code = concept_element.find('value').text,
-            display = concept_element.find('meaning').text,
-            system = _terminology(concept_element.find('scheme/designator').text),
-        )]
-    )
+    report['code'] = _coded_concept(concept_element)
 
     # possible FHIR status values:   registered | partial | preliminary | final
     # amended | corrected | appended | cancelled | entered-in-error | unknown
@@ -122,12 +155,12 @@ def diagnostic_report_resource(
     if completion_element is not None:
         status = dict(PARTIAL = 'partial', COMPLETE = 'final')[
             completion_element.attrib['flag']]
-    result['status'] = status
+    report['status'] = status
     
-    result['subject'] = dict(
+    report['subject'] = dict(
         reference = 'Patient/%s' % patient_id,
     )
-    result['imagingStudy'] = [
+    report['imagingStudy'] = [
         dict(reference = 'ImagingStudy/%s' % imaging_study_id),
     ]
 
@@ -137,8 +170,28 @@ def diagnostic_report_resource(
         performers.append(dict(
             actor = _person_name(pname_element.find('value')),
         ))
-    result['performer'] = performers
+    report['performer'] = performers
+
+    observation_counter = itertools.count(1)
     
+    observations = []
+    # we focus on 126010 / "Imaging Measurements" for now
+    # (there are also "Derived Imaging Measurements" and "Qualitative Evaluations"
+    measurements_element = container_element.find("container[relationship='CONTAINS']/concept[value='126010']/..")
+    for measurement_group_element in measurements_element.findall(
+            "container[relationship='CONTAINS']/concept[value='125007']/.."):
+        observations.extend(
+            observation_groups_resources(
+                measurement_group_element,
+                observation_counter,
+                report_status = report['status']))
+    
+    results = []
+    for observation in observations:
+        results.append(dict(reference = 'Observation/%s' % observation['id']))
+    report['result'] = results
+    
+    result.extend(observations)
     return result
 
 
