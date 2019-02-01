@@ -120,11 +120,6 @@ const observation_attenuation_coefficient: fhirObservation = {
       }
     ]
   },
-  method: {
-    coding: [
-      // Coding and Algorithm are not exactly interchangeable
-    ]
-  },
   code: {
     coding: [
       {

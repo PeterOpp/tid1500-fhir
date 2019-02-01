@@ -72,8 +72,5 @@ def test_report_reference_fit(dicom_file_path):
         assert "Observation/" + observation["id"] in observation_references
     
 
-
-    
-
 def get_resources_of_type(bundle, type):
     return [ entry["resource"] for entry in bundle["entry"] if entry["resource"]["resourceType"] == type]
