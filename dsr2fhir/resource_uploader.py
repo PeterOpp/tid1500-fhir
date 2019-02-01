@@ -1,6 +1,7 @@
 import asyncio
 import requests
 import json
+import argparse
 
 class BundleUploader:
 
@@ -82,4 +83,17 @@ class BundleUploader:
     async def perform_post_to_server(self):
         url = "%s/" % self.server_base_url
         return requests.post(url, json = self.fhir_bundle)
+        # TODO: To make this fully async, we need to call it in loop.run_in_executor
+        # However, then, we cannot add the json payload
+        
         #return await loop.run_in_executor(None, requests.post, url,)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description = 'Upload a FHIR bundle to a server while checking for existing resources first')
+    parser.add_argument('bundle_filename')
+    parser.add_argument('fhir_server_base_url')
+    args = parser.parse_args()
+    load_file = open(args.bundle_filename)
+    bundle_json = json.loads(load_file.read())
+    uploader = BundleUploader(bundle_json, args.fhir_server_base_url)
+    uploader.upload_bundle()
