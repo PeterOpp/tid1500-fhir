@@ -52,6 +52,8 @@ mocked_patient_available_json = r'''{
   ]
 }'''
 
+mocked_patient_available_return = r'{"resourceType": "Bundle", "type": "transaction", "entry": [{"request": {"method": "POST", "url": ""}, "resource": {"resourceType": "DiagnosticReport", "id": "DiagnosticReport", "identifier": [{"system": "urn:dicom:uid", "value": "1.2.276.0.7230010.3.1.4.0.83735.1480019874.480726"}], "code": {"coding": [{"code": "126000", "display": "Imaging Measurement Report", "system": "http://dicom.nema.org/resources/ontology/DCM"}]}, "status": "final", "subject": {"reference": "Patient/Patient"}, "imagingStudy": [{"reference": "ImagingStudy/ImageLibrary"}], "performer": [{"actor": {"family": "Reader1"}}]}}, {"request": {"method": "POST", "url": ""}, "resource": {"resourceType": "Patient", "id": "Patient", "name": [{"family": "JANCT000"}], "identifier": [{"system": "urn:dicom:<<<patient_id>>>", "value": "99000"}], "gender": "male"}}, {"request": {"method": "POST", "url": ""}, "resource": {"resourceType": "ImagingStudy", "id": "ImageLibrary", "uid": "1.2.392.200103.20080913.113635.0.2009.6.22.21.43.10.22941.1", "patient": {"reference": "Patient/Patient"}, "series": [{"uid": "1.2.276.0.7230010.3.1.3.0.42154.1458337731.665795", "instance": [{"sopClass": "SegmentationStorage", "uid": "1.2.276.0.7230010.3.1.4.0.42154.1458337731.665796"}]}, {"uid": "1.2.392.200103.20080913.113635.1.2009.6.22.21.43.10.23430.1", "instance": [{"sopClass": "CTImageStorage", "uid": "1.2.392.200103.20080913.113635.2.2009.6.22.21.43.10.23431.1"}, {"sopClass": "CTImageStorage", "uid": "1.2.392.200103.20080913.113635.2.2009.6.22.21.43.10.23432.1"}, {"sopClass": "CTImageStorage", "uid": "1.2.392.200103.20080913.113635.2.2009.6.22.21.43.10.23433.1"}]}]}}]}'
+
 
 base_url = "http:localhost:8080/fhir_base/"
 
@@ -81,12 +83,13 @@ def patched_requests_patient_existing(monkeypatch):
         else:
             return old_get(uri, args)
 
-    def mocked_post(uri, *args, **kwargs):
+    def mocked_post(uri, json, *args, **kwargs):
         print("Performing POST request at uri %s" % uri)
-        payload = args[0]
+        payload = json
         ensure_patient_resource_not_in_payload(payload)
         mock = type('MockedReq', (), {})()
-        mock.json = lambda: dict
+        mock.json = lambda: json.loads(mocked_patient_available_return)
+        mock.test = lambda: mocked_patient_available_return
         return mock
     # finally, patch Requests.get with patched version
     monkeypatch.setattr(requests, 'post', mocked_post)

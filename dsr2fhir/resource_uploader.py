@@ -30,7 +30,8 @@ class BundleUploader:
     async def upload_async(self):
         identifier = self.extract_patient_identifier()
         response = await self.request_patient_file_with_identifier(identifier)
-        if len(response["entry"]) > 0:
+        if not response["total"] == 0:
+            print(response)
             id = response["entry"][0]["resource"]["id"]
             self.replace_patient_id_in_bundle(id)
         
