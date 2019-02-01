@@ -1,4 +1,4 @@
-# DCM4QI
+# tid1500-fhir
 
 This repository contains code and documentation related to conversion of measurements encoded in a TID 1500 DICOM file and FHIR.
 
